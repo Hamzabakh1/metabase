@@ -1,0 +1,11 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base"],
+  "description": "Automated dependency updates for Metabase Docker setup",
+  "labels": ["dependencies", "docker"],
+  "enabledManagers": ["dockerfile"],
+  "dockerfile": {
+    "enabled": true,
+    "fileMatch": ["(^|/)Dockerfile$"]
+  }
+}
