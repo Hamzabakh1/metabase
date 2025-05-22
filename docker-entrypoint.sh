@@ -7,6 +7,21 @@ echo "🔧 Starting Metabase entrypoint..."
 MB_PLUGINS_DIR="${MB_PLUGINS_DIR:-/plugins}"
 MB_JETTY_PORT="${PORT:-3000}"
 
+# --- ENSURE SNOWFLAKE DRIVER AND DEPENDENCIES ARE PRESENT ---
+if [ ! -f "$MB_PLUGINS_DIR/snowflake-jdbc-3.14.3.jar" ]; then
+  echo "⬇️  Downloading Snowflake JDBC driver..."
+  curl -L -o "$MB_PLUGINS_DIR/snowflake-jdbc-3.14.3.jar" \
+    "https://repo1.maven.org/maven2/net/snowflake/snowflake-jdbc/3.14.3/snowflake-jdbc-3.14.3.jar"
+fi
+
+if [ ! -f "$MB_PLUGINS_DIR/arrow-memory-8.0.0.jar" ]; then
+  echo "⬇️  Downloading Apache Arrow memory dependency..."
+  curl -L -o "$MB_PLUGINS_DIR/arrow-memory-8.0.0.jar" \
+    "https://repo1.maven.org/maven2/org/apache/arrow/arrow-memory/8.0.0/arrow-memory-8.0.0.jar"
+fi
+
+# Add additional dependencies as needed
+
 # --- OPTIONAL: VERIFY MB_SITE_URL REACHABILITY ---
 if [[ -n "${MB_SITE_URL:-}" ]]; then
   echo "🔍 Verifying MB_SITE_URL: $MB_SITE_URL"
