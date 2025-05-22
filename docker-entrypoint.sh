@@ -4,7 +4,7 @@ set -euo pipefail
 echo "🔧 Starting Metabase entrypoint..."
 
 # --- CONFIGURABLE VARIABLES ---
-MB_PLUGINS_DIR="/plugins"
+MB_PLUGINS_DIR="${MB_PLUGINS_DIR:-/plugins}"
 SNOWFLAKE_PLUGIN_JAR="$MB_PLUGINS_DIR/snowflake.metabase-driver.jar"
 SNOWFLAKE_PLUGIN_URL="https://downloads.metabase.com/driver/snowflake.metabase-driver.jar"
 MB_JETTY_PORT="${PORT:-3000}"
@@ -18,7 +18,7 @@ if [ ! -f "$SNOWFLAKE_PLUGIN_JAR" ]; then
   if curl --location --fail --output "$SNOWFLAKE_PLUGIN_JAR" "$SNOWFLAKE_PLUGIN_URL"; then
     echo "✅ Snowflake plugin downloaded to $SNOWFLAKE_PLUGIN_JAR"
   else
-    echo "❌ ERROR: Failed to download the Snowflake plugin from $SNOWFLAKE_PLUGIN_URL"
+    echo "❌ ERROR: Failed to download the Snowflake plugin from $SNOWFLAKE_PLUGIN_URL" >&2
     exit 1
   fi
 else
@@ -32,7 +32,7 @@ if [[ -n "${MB_SITE_URL:-}" ]]; then
     echo "✅ MB_SITE_URL is reachable."
   else
     echo "⚠️ WARNING: MB_SITE_URL is not reachable or invalid: $MB_SITE_URL"
-    # Uncomment below to enforce strict URL check
+    # Uncomment to enforce strict check
     # exit 1
   fi
 else
@@ -42,10 +42,4 @@ fi
 # --- SET HEROKU PORT BINDING ---
 export MB_JETTY_PORT
 
-# --- IF HEROKU PROVIDES DATABASE_URL, CONFIGURE METABASE DB CONNECTION ---
-if [[ -n "${DATABASE_URL:-}" ]]; then
-  export MB_DB_CONNECTION_URI="$DATABASE_URL"
-fi
-
-echo "🚀 Launching Metabase..."
-exec java -jar /app/metabase.jar
+# --- IF HEROKU PROVIDES DATABASE_URL, CONFI_
