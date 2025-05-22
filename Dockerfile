@@ -1,4 +1,4 @@
-FROM metabase/metabase:v0.48.7
+FROM metabase/metabase:v0.54.9
 
 # Copy and configure custom entrypoint
 COPY docker-entrypoint.sh /app/docker-entrypoint.sh
