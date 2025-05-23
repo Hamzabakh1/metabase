@@ -28,4 +28,5 @@ if [[ -n "${MB_SITE_URL:-}" ]]; then
   fi
 fi
 
-exec java -cp "/app/plugins/*:/app/metabase.jar" metabase.core
+# ✅ Correct Metabase startup
+exec java -jar /app/metabase.jar
